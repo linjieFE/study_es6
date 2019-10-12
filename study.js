@@ -903,7 +903,99 @@ function show(...a){
   // 4）Promise对象
   // 5）es2017 async
 
-  
+
   // -----=============async====================
+  // 1)promise方式  demo配合node 实现读取文件a.text、 b.text、 c.text
+  
+const fs= require('fs');
+
+let readFile = function(filename){
+  return new Promise((resolve, reject) =>{
+      fs.readFile(filename,(err, data)=>{
+        if(err) reject()
+        resolve(data)
+      }
+    )
+  })
+}
+//Promise方式
+readFile('data/a.txt').then(res=>{
+  console.log(res.toString())
+  return readFile('data/b.txt')
+}).then(res=>{
+  console.log(res.toString())
+  return readFile('data/c.txt')
+}).then(res=>{
+  console.log(res.toString())
+});
+
+//generator方式
+function * gen(){
+  yield readFile('data/a.txt');
+  yield readFile('data/b.txt');
+  yield readFile('data/c.txt')
+}
+
+let g1= gen()
+
+g1.next().value.then(res=>{
+  console.log(res.toString())
+  return g1.next().value;
+}).then(res=>{
+  console.log(res.toString())
+  return g1.next().value;
+}).then(res=>{
+  console.log(res.toString())
+  return g1.next().value;
+})
+
+//async 方式
+async function fn(){
+  let file1 = await readFile('data/a.txt')
+  console.log(file1.toString())
+
+  let file2 = await readFile('data/b.txt')
+  console.log(file2.toString())
+
+  let file3 = await readFile('data/c.txt')
+  console.log(file3.toString())
+}
+fn()
+
+/*
+
+async function fn(){ 表示异步，这个函数里有异步的任务
+  let result = await xxx ..//表示后面结果需要等待
+}
+async的特点
+1. await只能放在 async函数中
+2. 相比generator 语义化更强
+3）await后面可以是promise对象，也是数字，字符串，布尔
+4）async函数返回是一个promise 对象
+5）只await语句后面的promise状态变成reject，那么整个async函数会中断执行 
+6）//=>如何解决async函数中抛出错误，影响后续化码执行 try{...}catch(e){...} 或在promise 后面直接catch方法
+----------*/
+async function fn(){
+  return 'welcome'
+}
+fn().then(res=>{
+  console.log(res)//=> welcome (说明async返回是一个promise)
+})
+// --------------
+
+async function fn(){
+  //Promise.all([a,b,c])...
+ //=>如何解决async函数中抛出错误，影响后续化码执行 try{...}catch(e){...}
+  throw new Error('出错了！') //await Promise.reject('出问题了'); 
+  let a = await Promise.resolve('success');//这里不会执行 因为 5）
+  console.log(a)
+}
+fn().then(res=>{
+  console.log(res)
+},err=>{
+  console.log(err)//=>出错了！
+})//或这里.cacth()...
+
+//个人建议==>任何async 当中都要加上try..catch..  koa2
 
 
