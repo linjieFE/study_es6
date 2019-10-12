@@ -835,3 +835,75 @@ function show(...a){
  
  //=========== 关于Class  一个拖曳 demo 例子 详见class.html=========
  
+ //============generrator=====
+ /*
+  生成器
+
+  解决异步的问题 ，深度嵌套的问题 迭代器
+
+  定义方式 function * fn(){}
+ */
+//定义
+  function * gen(){
+    yield 'welcome'
+    yield 'to'
+    yield 'myhome'
+    return 'zheng theacher'
+  }
+
+//调用
+  let g= gen()
+  console.log(g)// 返回的是一个对象
+  onsole.log(g.next())// {value:'welcome',done:false} =>done 表示是不是完成
+  onsole.log(g.next())// {value:'to',done:false} =>done 表示是不是完成
+  onsole.log(g.next())// {value:'myhome',done:false} =>done 表示是不是完成
+  onsole.log(g.next())// {value:'zheng theacher',done:true} =>done =true 完成
+
+  //上述调用，手机调用，麻烦  简化
+
+  for (let key of g){
+    console.log(key)//但是 return 里的内容不能遍历
+  }
+
+  //解构方法 
+
+  let [a,b,c,d] =  g
+  console.log(a,b,c,d)//=>welcome to myhome undefined   ==>return 里的不能被解构
+
+  let [a,...d] =  g
+  console.log(a,d)//welcome [to, myhome]
+
+  console.log(...g)//=> welcome to myhome
+
+  console.log(Array.from(gen()))//=>[welcome, to, myhome] 转成数组
+
+  //====用 generator解决异步====
+  function * gen(){
+    let val = yield 'linjiefe'
+    yield axios.get(`https://api.github.com/users/${val}`);
+  }
+
+  let g1 =gen()
+
+  let username = g1.next().value;
+
+  console.log(username)//=>linjiefe
+  console.log(g1.next(username).value)//=>这里因为axios返回的是一个Promise
+  g1.next(username).value.then(res=>{
+    console.log(res.data)
+  })
+
+  //异步 不连续，上一个操作没有执行完 下一个操作照样开始
+  //同步 连续执行，上一个操作没有执行完，下一个不能进行，
+
+  //关于异步，解决方案“
+  // 1）回调函数
+  // 2）事件监听
+  // 3 发布/订阅
+  // 4）Promise对象
+  // 5）es2017 async
+
+  
+  // -----=============async====================
+
+
