@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>运用类的继承写一个拖曳的例子</title>
+    <style>
+        .box{
+            width:100px;
+            height:100px;
+            background: red;
+            position: absolute;
+            top:0;
+        }
+        .left{
+            left:0;
+        }
+        .right{
+            right:0;
+        }
+    </style>
+    <script>
+        //class 不能写这里
+    </script>
+</head>
+<body>
+    <div id="div1" class="box left">DIV1</div>
+    <div id="div2" class="box right">DIV2</div>
+    <script>//
+            //父类
+            class Drag{
+                constructor(id){
+                    this.oDiv = document.querySelector(id);
+                    this.disX = 0; 
+                    this.disY = 0;
+                    this.init();
+                }
+                init(){
+                        this.oDiv.onmousedown = function(ev){
+                        console.log(this)//如果不写bind(this) 这里的this指向this.oDiv 所以外层要bind(this)
+                        this.disX = ev.clientX - this.oDiv.offsetLeft;
+                        this.disY = ev.clientY - this.oDiv.offsetTop;// 关于clientY、offsetTop。。。方法，参见https://blog.csdn.net/qq_36947128/article/details/72879382
+                        
+                        document.onmousemove = this.fnMove.bind(this);
+                        document.onmouseup = this.fnUp.bind(this);
+                        
+                        return false
+                    }.bind(this)            
+                }
+                fnMove(ev){
+                    
+                    // this.oDiv.style.left = ev.clientX - `${this.disX}px`
+                    // this.oDiv.style.top = ev.clientY - `${this.disY}px` //不能用字符串解构的方式
+                    this.oDiv.style.left = ev.clientX - this.disX+'px';
+                    this.oDiv.style.top = ev.clientY - this.disY+'px';
+                }
+                fnUp(){
+                    document.onmousemove = null
+                    document.onmouseup = null
+                }
+            }
+    
+            //子类 重写fnMove 增加限制范围
+            class LimitDrag extends Drag{
+                fnMove(ev){
+                    super.fnMove(ev)
+                    //限制范围
+                    if(this.oDiv.offsetLeft <=0){
+                        this.oDiv.style.left =0 //div2拖曳范围不超过浏览器左边界
+                    }
+                }
+            }
+            //调用
+            new Drag('#div1');
+            new LimitDrag('#div2')
+        </script>
+</body>
+</html>
