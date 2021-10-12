@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+</body>
+<script type="text/javascript">
+/**
+ * 伪代码
+ * 1.建立两对像linjieFE fangke
+ * 2.让访客跟林杰cpe过通门铃通信
+ * 3.选 看linjie家是否有门，有直接按，没有造门
+ * 4.两者开始通信
+*/
+    var linjieFE = (function(arg){
+        var linjieHome=function(msg){
+            this.menling = msg;
+        }
+        var men;
+        var info={
+            sendMsg:function(msg){
+                if(!men){
+                    men= new linjieHome(msg)
+                    return men;
+                }
+            }
+        }
+        return info
+    })()
+
+    var fangke = {
+        calling:function(msg){
+            var _linjie =  linjieFE.sendMsg(msg)
+            alert(_linjie.menling);
+            _linjie = null;//闭包销毁
+        }
+    }
+    fangke.calling('ringring~')
+</script>
+</html>
