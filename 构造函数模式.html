@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>构造函数模式</h2>
+</body>
+<script type="text/javascript">
+/**
+ * 伪代码
+ * 1.建立两对象公司AA BB
+ * 2.都可以造车
+ * 3.构造函数模式和单例模式的混合使用。
+*/
+// (function(){
+    var AA={
+        MakeCar: function(lunzi='普通',slogen='Audi'){
+            this.lunzi = lunzi;
+            this.slogen = slogen;
+            this.create = function(){
+                return `Lunzi是：${this.lunzi},Slogen${this.slogen}`
+            }
+        }  
+    };
+    var BB={
+        MakeCar: function(lunzi='普通',slogen='BMW'){
+            this.lunzi = lunzi;
+            this.slogen = slogen;
+            this.create = function(){
+                return `Lunzi是：${this.lunzi},Slogen${this.slogen}`
+            }
+        }  
+    };
+    var carA = new AA.MakeCar()
+    var carB = new BB.MakeCar()
+
+    alert(carA.create());
+    alert(carB.create());
+// })()
+
+</script>
+
+</html>
