@@ -7,7 +7,8 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <button id="a">Top A</button>
+    <button id="d">Banner D</button>
 </body>
 <script type="text/javascript">
 /**
@@ -41,5 +42,63 @@
         }
     }
     fangke.calling('ringring~')
+</script>
+<script type="text/javascript">
+    /**
+     * 页面上6个按钮
+     * abc =>top
+     * def =>banner
+     */
+    (function(){
+        var top={
+            init:function(){
+                this.render();
+                this.bind();
+            },
+            a:4,
+            render:function(){
+                var me = this;
+                me.btnA = document.querySelector("#a");
+            },
+            bind:function(){
+                var me = this;
+                me.btnA.onclick = function(){
+                    //业务
+                    me.test()
+                }
+            },
+            test:function(){
+                banner.a=5
+                alert('Banner'+banner.a);
+            }
+
+        }
+        var banner={
+            init:function(){
+                this.render();
+                this.bind();
+            },
+            a:4,
+            render:function(){
+                var me = this;
+                me.btnA = document.querySelector("#d");
+            },
+            bind:function(){
+                var me = this;
+                me.btnA.onclick = function(){
+                    //业务
+                    me.test()
+                }
+            },
+            test:function(){
+                top.a=6
+                alert('Top'+top.a);
+            }
+        }
+        top.init();
+        banner.init();
+    })()
+    
+    
 </script>
 </html>
